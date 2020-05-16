@@ -1,0 +1,20 @@
+{
+  "name": "titles",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:streamdevs/titles.git",
+  "author": "Orestes Carracedo <orestes@orestes.io>",
+  "license": "CC-BY-4.0",
+  "devDependencies": {
+    "httpster": "^1.0.4"
+  },
+  "scripts": {
+    "serve": "browser-sync start --server --files '*.html'",
+    "go": "yarn build && yarn deploy",
+    "deploy": "firebase deploy --only hosting",
+    "build": "rm -Rf dist/*; cp -r assets index.html magic.min.css dist;"
+  },
+  "dependencies": {
+    "browser-sync": "^2.26.7"
+  }
+}

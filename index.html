@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testing animations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="magic.min.css">
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: black;
+    }
+    .title {
+        width: 600px;
+        height: 120px;
+        background: white;
+        padding: 1em;
+        display: flex;
+        flex-direction: row;
+        border-radius: 1em;
+        font-family: 'Fira Sans', sans-serif;
+    }
+    .title img {
+        max-width: 96px;
+        margin-right: 1em;
+    }
+    .title .text {
+        display: flex;
+        flex-direction: column;
+    }
+    .title .text .top {
+        font-size: 240%;
+        color: #383838;
+    }
+    .title .text .bottom {
+        font-size: 170%;
+        color: #8a00d4;
+    }
+    .hidden {
+        visibility: hidden;
+    }
+    </style>
+</head>
+<body>
+
+<article class="title title-twitch hidden">
+    <img class="hidden" src="assets/twitch.svg" alt="Twitch">
+    <div class="text">
+        <div class="top hidden">Santiago Martín</div>
+        <div class="bottom hidden">santiMA10</div>
+    </div>
+</article>
+
+<script id="__bs_script__">//<![CDATA[
+document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>".replace("HOST", location.hostname));
+//]]></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-firestore.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBfhhf_W8UHsUv-TWyNZc8cp1YyfOKy3Ms",
+        authDomain: "titles-8fe07.firebaseapp.com",
+        databaseURL: "https://titles-8fe07.firebaseio.com",
+        projectId: "titles-8fe07",
+        storageBucket: "titles-8fe07.appspot.com",
+        messagingSenderId: "133194977487",
+        appId: "1:133194977487:web:bba6c98d56e05a2b0e27ba"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const wait = (seconds) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, seconds * 1000);
+        });
+    };
+
+    const container = document.querySelector('article');
+    const textTop = document.querySelector('.top');
+    const textBottom = document.querySelector('.bottom');
+    const icon = document.querySelector('img');
+
+    /**
+     *
+     * @param {string} topText
+     * @param {string} bottomText
+     * @param {number} duration
+     * @returns {Promise<void>}
+     */
+    const displayTitle = async (topText, bottomText, duration) => {
+        textTop.innerText = topText;
+        textBottom.innerText = bottomText;
+        container.classList.remove('hidden');
+        container.classList.add('magictime','spaceInDown');
+        await wait(.2);
+        icon.classList.remove('hidden');
+        icon.classList.add('magictime','vanishIn');
+        await wait(.1);
+        textTop.classList.remove('hidden');
+        textTop.classList.add('magictime','vanishIn');
+        await wait(.1);
+        textBottom.classList.remove('hidden');
+        textBottom.classList.add('magictime','vanishIn');
+        await wait(duration);
+        container.classList.remove('spaceInDown');
+        container.classList.add('slideDown');
+        await wait(1);
+        textBottom.classList.add('hidden');
+        textTop.classList.add('hidden');
+        container.classList.add('hidden');
+        textBottom.classList.remove('magictime');
+        textTop.classList.remove('magictime');
+        container.classList.remove('magictime');
+    };
+
+    const shown = {};
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const collection = firebase.firestore().collection('titles');
+
+        collection.onSnapshot({next: async (snapshot) => {
+            console.log('Query returns new data');
+            const showTitles = [];
+            snapshot.forEach(doc => {
+                if (shown[doc.id]) {
+                    console.log(`Skipping already shown title: ${doc.id}`);
+                    return;
+                }
+
+                const {top, bottom, duration} = doc.data();
+                showTitles.push(() => {
+                    shown[doc.id] = true;
+                    return displayTitle(top, bottom, duration);
+                });
+            });
+
+            for ( let t of showTitles) {
+                await t();
+            }
+        }});
+    })
+</script>
+
+</body>
+</html>
