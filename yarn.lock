@@ -935,10 +935,10 @@ http-proxy@1.15.2:
     eventemitter3 "1.x.x"
     requires-port "1.x.x"
 
-httpster@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/httpster/-/httpster-1.0.4.tgz#76debb5ba91cd6203ecf1403b1fb29cc6921bd99"
-  integrity sha512-abdvz4AvCOsOM2VoqCcKllt2vYTFe4sRQ8PyPM1fHISPWo9cezUZj6SNe9Dr3jHo5yapnA1XkA93zUkpkx/Maw==
+httpster@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/httpster/-/httpster-1.1.0.tgz#7db671e81180a1b253b430d0d2d123820b7f6e0e"
+  integrity sha512-clvsY6m8L+LIfbwGG9I2FQBdmcWemFUWfnAr6a3tFJ+vJhmzlFkCCZHxCW16YmHLHauXwTsEyPgccsmnf0yCMQ==
   dependencies:
     basic-auth "^2.0.0"
     commander "2.17.x"

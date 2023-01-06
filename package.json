@@ -6,7 +6,7 @@
   "author": "Orestes Carracedo <orestes@orestes.io>",
   "license": "CC-BY-4.0",
   "devDependencies": {
-    "httpster": "^1.0.4"
+    "httpster": "^1.1.0"
   },
   "scripts": {
     "serve": "browser-sync start --server --files '*.html'",
